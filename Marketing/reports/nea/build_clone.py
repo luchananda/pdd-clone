@@ -39,13 +39,49 @@ band = re.sub(r'Last updated: [^.]*\.', 'Last updated: ' + datetime.datetime.utc
 # --- side panel "Asteroids today": map, discovered list, rare finds, cumulative carousel, ads
 wd = json.load(open(os.path.join(HERE, '..', 'home', 'watch-data.json')))
 latest = max(p_['date'] for p_ in wd['pts']); newest = [p_ for p_ in wd['pts'] if p_['date'] == latest]
-disc = ''.join(f'<li><span class="dot"></span><a href="https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html#/?sstr={_h.escape(p_["des"])}" target="_blank" rel="noopener">{_h.escape(p_["des"])}</a> <small><a href="https://minorplanetcenter.net/mpec/RecentMPECs.html" target="_blank" rel="noopener">MPC</a> · MPEC {_h.escape(p_["mpec"])}</small></li>' for p_ in newest)
+def etype(p_): return 'Atmospheric entry' if p_.get('impact') else ('Potentially hazardous (PHA)' if p_.get('pha') else 'Near-Earth object')
+drows = ''.join(f'<tr class="dr"><td class="nw" data-v="{_h.escape(p_["des"])}"><a href="https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html#/?sstr={_h.escape(p_["des"])}" target="_blank" rel="noopener">{_h.escape(p_["des"])}</a></td><td data-v="{_h.escape(etype(p_))}">{etype(p_)}</td><td data-v="{p_["date"]}">{datetime.date.fromisoformat(p_["date"]).strftime("%b-%d")}</td><td data-v="{_h.escape(p_["mpec"])}">{_h.escape(p_["mpec"])}</td><td class="n" data-v="{p_["lat"]:.3f}">{p_["lat"]:.1f}°, {p_["lon"]:.1f}°</td></tr>' for p_ in sorted(wd['pts'], key=lambda q: q['date'], reverse=True))
+dnote = f'<p class="td">Designations announced in the Minor Planet Center’s circulars (MPECs), located with JPL data; last updated {_h.escape(wd["time"])}, refreshed automatically every 8 hours. Click a column heading to sort.</p>'
+dtab = dnote + '<div class="tw"><table class="sortable dtab"><thead><tr><th>Discovered</th><th>Type</th><th>Announced</th><th>MPEC</th><th class="n">Over now</th></tr></thead><tbody>' + drows + '</tbody></table></div>'
 aside = re.search(r'<aside class="side">(.*?)</aside>', mock, flags=re.S).group(1)
-aside = re.sub(r'(<h3>Discovered today</h3>\s*<p[^>]*>).*?(</p>)', lambda m: m.group(1) + 'Designations announced on ' + datetime.date.fromisoformat(latest).strftime('%d %b %Y') + ' (MPC circulars).' + m.group(2), aside, count=1, flags=re.S)
-aside = re.sub(r'<ul class="disc">.*?</ul>', '<ul class="disc">' + disc + '</ul>', aside, count=1, flags=re.S)
-cut = aside.index('<div style="margin:0 0 16px">')
-left, right = aside[:cut], aside[cut:]
-band += ('<section id="asteroids-today"><p class="kicker">Asteroids today</p><h2>ASTEROIDS TODAY</h2><div class="sidegrid"><div>' + left + '</div><div>' + right + '</div></div></section>')
+mapbit = aside[:aside.index('<h3>Discovered today</h3>')]
+cumcar = re.search(r'<div class="carousel" data-carousel data-auto>.*?<div class="ctrl">.*?</div></div>', aside, flags=re.S).group(0)
+rare = aside[aside.index('<div style="margin:0 0 16px">'):aside.index('<h3>Cumulative NEAs</h3>')] if '<div style="margin:0 0 16px">' in aside else ''
+ads = aside[aside.index('<div class="sads">'):]
+rare_img = re.search(r'<img class="ad-img" src="([^"]+)"', rare).group(1) if rare else ''
+os.makedirs(os.path.join(OUT, 'img'), exist_ok=True); shutil.copy(os.path.join(HERE, '..', 'home', 'ad-images', 'nrf-icon.png'), os.path.join(OUT, 'img', 'nrf-icon.png'))
+XSVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.2 2H21l-6.5 7.4L22 22h-6l-4.7-6.1L5.8 22H3l7-8L2 2h6.1l4.2 5.6L18.2 2zm-1 18h1.6L7 3.8H5.3L17.2 20z"/></svg>'
+tiles = [('<img src="' + rare_img + '" alt="Rare finds">', 'Rare finds', 'Hand-picked space finds.', 'https://relics.luisafernanda.space/', 'Shop Rare finds', 'Sponsored · affiliate link'),
+         ('<img src="' + LIVE + '/logo/planetary-defense-daily/dark" alt="Planetary Defense Daily">', 'Subscribe', 'The daily briefing in your inbox.', LIVE + '/#subscribe', 'Subscribe', 'Ad'),
+         ('<img src="img/nrf-icon.png" alt="Newsroom Floor">', 'Newsroom Floor', 'Build and check your own AI newspaper.', 'https://newsroomfloor.com', 'Visit Newsroom Floor', 'Ad'),
+         ('<span class="xl">' + XSVG + '</span>', 'Follow us on X', 'New stories and charts as they land.', 'https://x.com/newtons_in_laws', 'Follow @newtons_in_laws', 'Ad')]
+ad4 = '<div class="ad4">' + ''.join(f'<a class="tile" href="{h}" target="_blank" rel="noopener"><span class="tg">{tg}</span><span class="ti">{im}</span><b>{t}</b><span class="tt">{tx}</span><span class="tb">{cta}</span></a>' for im, t, tx, h, cta, tg in tiles) + '</div>'
+astblock = ('<details><summary>ASTEROIDS TODAY</summary>'
+            '<div class="dd2 ast"><div>' + mapbit + '</div><div>' + dtab + '</div></div>'
+            '<div class="dd2 cum"><div class="capwide cap-open"></div><div>' + cumcar + '</div></div>'
+            + ad4 + '</details>')
+# --- Close approaches: chart caption right under the chart (a closed dropdown, title and one-liner on the same line, max 17 lines), table as a closed dropdown with its title
+ci = band.index('<details><summary>CLOSE APPROACHES'); cj = band.index('<details><summary>IMPACT RISK')
+blk = band[ci:cj]
+blk = blk.replace('<div class="capwide"></div>', '', 1)
+blk = re.sub(r'(<div class="ctrl">.*?</div></div>)(</div>)', r'\1<div class="capwide cap-left"></div>\2', blk, count=1, flags=re.S)
+blk = re.sub(r'<figcaption><b>([^<]*)</b><details class="capd"><summary>(.*?)</summary>', r'<figcaption><details class="capd"><summary><span class="stext"><b class="ct1">\1</b> \2</span></summary>', blk, flags=re.S)
+m = re.search(r'<p class="tk">(.*?)</p>(<p class="td">.*?</p>)(<div class="tw">.*?</div>)', blk, flags=re.S)
+blk = blk[:m.start()] + '<div class="ca-desc"><p class="tk">' + m.group(1) + '</p>' + m.group(2) + '</div><details class="tdd"><summary><span class="stext"><b class="ct1">Table:</b> the 15 closest asteroids, next 7 days</span></summary>' + m.group(3) + '</details>' + blk[m.end():]
+blk = blk.replace('<div class="dd2">', '<div class="dd2 ca">', 1)
+band = band[:ci] + blk + band[cj:]
+# --- Impact risk: same treatment (description kept + 2 more lines, table as a closed dropdown with its title, chart caption under the chart)
+ii = band.index('<details><summary>IMPACT RISK'); tail = '</section>'
+blk2 = band[ii:band.rindex(tail)]
+blk2 = blk2.replace('<div class="capwide"></div>', '', 1)
+blk2 = re.sub(r'(<div class="ctrl">.*?</div></div>)(</div>)', r'\1<div class="capwide cap-left"></div>\2', blk2, count=1, flags=re.S)
+blk2 = re.sub(r'<figcaption><b>([^<]*)</b><details class="capd"><summary>(.*?)</summary>', r'<figcaption><details class="capd"><summary><span class="stext"><b class="ct1">\1</b> \2</span></summary>', blk2, flags=re.S)
+m2 = re.search(r'(<p class="td">.*?)(</p>)(<div class="tw">.*?</div>)', blk2, flags=re.S)
+extra = ' The list runs from the highest cumulative Palermo value down, and “Impact year(s)” is the span of years in which Sentry finds possible impacts for each object. Prob. adds up the chance of all those possible impacts, and LD is how close the object passes Earth, from NASA/JPL CNEOS.'
+blk2 = blk2[:m2.start()] + '<div class="ca-desc">' + m2.group(1) + extra + m2.group(2) + '</div><details class="tdd"><summary><span class="stext"><b class="ct1">Table:</b> the 15 objects with the highest impact risk</span></summary>' + m2.group(3) + '</details>' + blk2[m2.end():]
+blk2 = blk2.replace('<div class="dd2 big">', '<div class="dd2 big ca ci">', 1)
+band = band[:ii] + blk2 + band[band.rindex(tail):]
+band = band.replace('<details><summary>CLOSE APPROACHES', astblock + '<details><summary>CLOSE APPROACHES', 1)
 # --- css: only what the band needs, every rule scoped to #swx so the paper's own styles are untouched
 def styles(ident):
     m = re.search(r'<style id="%s">(.*?)</style>' % ident, mock, flags=re.S); return m.group(1) if m else ''
@@ -75,7 +111,7 @@ vars_ = '#swx{--bg:#0b1526;--card:#16233a;--card2:#121e33;--ink:#eef2fa;--ink2:#
 KEEP = r'^(\.side|\.disc|\.dot|\.sads|\.sad|\.spons|\.aff|\.banner|\.ad-img|\.mb|\.ic|\.sidegrid|\.map-key|details|summary|\.dd|\.tw|table|th|td|\.carousel|\.slides|\.slide|\.ctrl|\.kicker|h2|\.btn|\.cpic|\.cfig|\.capd|\.capwide|\.tk|\.td|\.big|\.pos|section|a|img|\.nw|\.n|p)'
 css = vars_ + scope(base, KEEP) + scope(styles('charts-css'), r'^(\.cpic|\.cfig|\.cpics)') + scope(styles('v9-css')) + scope(styles('v10-css')) + scope(styles('v11-css'))
 css += styles('charts-css')                                           # lightbox and object cards (#clb, .chs, .pcard) are page-level
-css = css.replace('#swx #swx', '#swx') + '#swx .sidegrid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:22px}@media(max-width:900px){#swx .sidegrid{grid-template-columns:1fr}}#swx .side h3{font:700 24px "Playfair Display",Georgia,serif;color:#eef2fa;margin:14px 0 8px}#swx .disc{list-style:none;padding:0;margin:0 0 16px}#swx .disc li{padding:7px 0;border-bottom:1px solid #2c3b57}#swx .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#8ab7ea;margin-right:7px}'
+css = css.replace('5em', '3.5em').replace('#swx #swx', '#swx') + '#swx .cap-left{grid-column:auto!important;border-top:0!important;padding-top:10px;max-height:calc(17 * 1.55 * 17px);overflow-y:auto}#swx .capd>summary{font-size:17px!important;line-height:1.55}#swx .capd>summary b.ct1{font-size:20px;color:#eef2fa}#swx .dd2 .slide figcaption{display:none}#swx .dd2.ca>div{display:contents}#swx .dd2.ca .carousel{grid-column:1;grid-row:1;align-self:start}#swx .dd2.ca .cap-left{grid-column:1;grid-row:2}#swx .dd2.ca .ca-desc{grid-column:2;grid-row:1}#swx .dd2.ca details.tdd{grid-column:2;grid-row:2;align-self:start}#swx .dd2.ca .cap-left{align-self:start;padding-top:0!important}#swx .dd2.ca details.tdd b.ct1{font-size:20px;color:#eef2fa}#swx .dd2.ca.ci .ca-desc{grid-column:1;grid-row:1}#swx .dd2.ca.ci details.tdd{grid-column:1;grid-row:2}#swx .dd2.ca.ci .carousel{grid-column:2;grid-row:1}#swx .dd2.ca.ci .cap-left{grid-column:2;grid-row:2}#swx .dd2.ca details.tdd,#swx .dd2.ca .capd{margin:0;background:none;border:0;border-top:1px solid #2c3b57;border-radius:0}#swx .dd2.ca .cap-left{max-height:none;overflow:visible}#swx .dd2.ca .cap-left .capd{max-height:calc(17 * 1.55 * 17px);overflow-y:auto}#swx .dd2.ca summary{display:flex!important;justify-content:space-between;align-items:flex-start;gap:14px;padding:12px 0!important;font-size:17px!important;line-height:1.55!important;letter-spacing:0!important;text-transform:none!important;font-weight:400!important;color:#cbd5e6!important;cursor:pointer}#swx .dd2.ca summary::after{content:"+"!important;float:none!important;font-size:30px!important;line-height:.9!important;color:#de7c7c!important;flex:0 0 auto}#swx .dd2.ca details[open]>summary::after{content:"\\2212"!important}#swx .dd2.ca details.tdd .tw{padding:0 0 12px}#swx details.tdd>summary{padding:12px 14px!important;letter-spacing:0!important;text-transform:none!important}#swx details.tdd>summary{display:flex!important;justify-content:space-between;align-items:center;gap:12px}#swx details.tdd>summary::after{font-size:1.6em;line-height:.5;float:none}#swx details.tdd .tk{font:900 26px/1.1 "Playfair Display",Georgia,serif;color:#de7c7c}#swx details.tdd .tsub{display:block;font-size:15px;font-weight:400;color:#a2afc6;margin-top:2px}#swx details.tdd .td,#swx details.tdd .tw{padding:0 14px 14px}#swx .dd2 .ctrl button{font-size:28px!important;padding:0 18px 4px!important;border-width:1px!important}#swx .dd2 .ctrl .pos{font-size:22px!important}#swx .ad4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;padding:0 16px 16px}@media(max-width:900px){#swx .ad4{grid-template-columns:repeat(2,minmax(0,1fr))}}#swx .ad4 .tile{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;background:#16233a;border:1px solid #2c3b57;border-radius:6px;padding:26px 12px 14px;text-decoration:none;color:#cbd5e6}#swx .ad4 .tile:hover{border-color:#de7c7c}#swx .ad4 .tg{position:absolute;top:6px;right:10px;font-size:11px;font-style:italic;color:#8d98ad}#swx .ad4 .ti{display:flex;align-items:center;justify-content:center;height:84px}#swx .ad4 .ti img{max-height:84px;max-width:100%;width:auto;border-radius:10px;object-fit:contain}#swx .ad4 .xl{width:84px;height:84px;border-radius:14px;background:#000;color:#fff;display:flex;align-items:center;justify-content:center}#swx .ad4 .xl svg{width:44px;height:44px}#swx .ad4 b{font:700 20px "Playfair Display",Georgia,serif;color:#eef2fa}#swx .ad4 .tt{font-size:15px;line-height:1.35}#swx .ad4 .tb{background:#de7c7c;color:#0b1526;font-weight:700;font-size:14px;padding:7px 12px;border-radius:4px}#swx .dd2.cum .capwide{grid-column:auto;border-top:0;padding-top:0}#swx .dd2.cum .capwide>b:first-child{font-size:24px;display:block;margin-bottom:6px}#swx .dd2.cum .capwide .capd b{font-size:inherit}#swx .dd2.cum .capwide summary{display:none}#swx .dd2.cum .capwide .capd[open]>summary{display:none}#swx .dtab td,#swx .dtab th{font-size:15px}#swx .sidegrid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:22px}@media(max-width:900px){#swx .sidegrid{grid-template-columns:1fr}}#swx .side h3{font:700 24px "Playfair Display",Georgia,serif;color:#eef2fa;margin:14px 0 8px}#swx .disc{list-style:none;padding:0;margin:0 0 16px}#swx .disc li{padding:7px 0;border-bottom:1px solid #2c3b57}#swx .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#8ab7ea;margin-right:7px}'
 css += '#swx h2{font:900 30px "Playfair Display",Georgia,serif;color:#eef2fa;border-bottom:1px solid #2c3b57;padding-bottom:8px;margin:0 0 14px}#swx .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#de7c7c;margin:0 0 8px}'
 # --- js: carousels, sorting, chart lightbox
 def script(ident):
@@ -83,11 +119,39 @@ def script(ident):
 carousel_js = re.search(r'<script>\s*(function show\(c,i\).*?)</script>', mock, flags=re.S).group(1)
 mapjs = re.search(r'<script>\s*(const WATCH=.*?)</script>', mock, flags=re.S).group(1)
 mapjs = re.sub(r'const WATCH=\{.*?\n\};?\n', lambda m: 'const WATCH=' + json.dumps(wd) + ';\n', mapjs, count=1, flags=re.S)
+carousel_js = carousel_js.replace('cw.innerHTML=fc.innerHTML}}', 'cw.innerHTML=fc.innerHTML;if(cw.classList.contains("cap-open")){var dd=cw.querySelector("details");if(dd)dd.open=true}}}')
 js = carousel_js + '\n' + script('v10-js') + '\n' + script('charts-js')
 inject_libs = '<script src="d3.min.js"></script><script src="topojson-client.min.js"></script>'
-mapblock = '<script id="swx-map">' + mapjs + '</script><script id="swx-v9">' + script('v9-js') + '</script>'
+v9 = script('v9-js').replace(".disc li", ".disc li,.dtab tr.dr").replace('7000', '10000')
+mapblock = '<script id="swx-map">' + mapjs + '</script><script id="swx-v9">' + v9 + '</script>'
 lb2 = '<div id="mlb" onclick="if(event.target===this)this.classList.remove(\'on\')"></div><div id="ocard"></div>'
 lb = '<div id="clb" role="dialog" aria-label="Chart, enlarged"><div id="clbi"></div></div>'
+
+css += ('@media(max-width:760px){'
+  '#swx{font-size:17px!important;padding:6px 10px 18px!important}'
+  '#swx .dd2,#swx .dd2.big,#swx .dd2.ca,#swx .dd2.ci,#swx .dd2.ast,#swx .dd2.cum,#swx .sidegrid{grid-template-columns:minmax(0,1fr)!important;gap:12px!important;padding:0 10px 12px!important}'
+  '#swx .dd2.ca .carousel,#swx .dd2.ca .cap-left,#swx .dd2.ca .ca-desc,#swx .dd2.ca details.tdd,#swx .dd2.ca.ci .carousel,#swx .dd2.ca.ci .cap-left,#swx .dd2.ca.ci .ca-desc,#swx .dd2.ca.ci details.tdd{grid-column:1!important;grid-row:auto!important}'
+  '#swx .dd2.cum .capwide{order:2}'
+  '#swx .ad4{grid-template-columns:minmax(0,1fr)!important;padding:0 10px 12px!important}'
+  '#swx #space-watch>details>summary,#swx details>summary{font-size:15px!important;letter-spacing:.06em!important;padding:12px 12px!important}'
+  '#swx #space-watch>details>summary::after{font-size:2.4em!important}'
+  '#swx h2{font-size:24px!important}'
+  '#swx .tk{font-size:22px!important}'
+  '#swx .td,#swx .dd2.big p,#swx .dd2.big .ca-desc p{font-size:15px!important;line-height:1.5!important}'
+  '#clb{overflow:auto!important;align-items:flex-start!important;justify-content:flex-start!important;padding:8px!important}#clbi{width:900px!important;max-width:none!important;flex:0 0 auto}'
+  '#swx .tw{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}'
+  '#swx table.sortable th,#swx table.sortable td{font-size:13px!important;padding:5px 5px!important;white-space:nowrap}'
+  '#swx .dd2 .ctrl button{font-size:24px!important;padding:0 16px 3px!important}'
+  '#swx .dd2 .ctrl .pos{font-size:18px!important}'
+  '#swx .capd>summary{font-size:15px!important}#swx .capd>summary b.ct1{font-size:17px!important}'
+  '#swx .dd2.cum .capwide>b:first-child{font-size:19px!important}'
+  '#swx .side h3,#swx .dd2.ast h3{font-size:20px!important}'
+  '#swx .mb{float:none!important;display:inline-block;margin:4px 0}'
+  '#swx #pdd-map{height:auto!important}'
+  '#swx .ad4 .tile{flex-direction:row;text-align:left;align-items:center;flex-wrap:wrap;padding:22px 12px 12px}'
+  '#swx .ad4 .ti{height:64px;flex:0 0 64px}#swx .ad4 .ti img,#swx .ad4 .xl{max-height:64px;width:64px;height:64px}'
+  '#swx .ad4 b{flex:1 1 calc(100% - 80px)}#swx .ad4 .tt{flex:1 1 100%}'
+  '}')
 inject_head = '<style id="swx-css">' + css + '</style>'
 inject_body = lb + lb2 + inject_libs + '<script id="swx-js">' + js + '</script>' + mapblock
 # --- the live page with absolute links
