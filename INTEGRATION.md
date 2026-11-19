@@ -2,8 +2,8 @@
 
 Nothing needs to be copied into that repo. Its workflow checks this repo out and runs our two scripts, writing the page into its own `pdd/` folder.
 
-## What changes in `.github/workflows/pdd.yml` of luisafernanda-space
-Replace the step `python3 scripts/pdd_watch/build_pd_watch.py` with these steps (keep the commit step that follows; add `pdd` to `git add`):
+## What changes in `.github/workflows/pdd-refresh.yml` of luisafernanda-space (updated 19 Nov after LuWeb's reply: `pdd.yml` no longer exists)
+The current workflow refreshes `pdd/index.html` every 8 hours with `python3 scripts/pdd_space/refresh_pdd.py`. LuWeb decides whether to keep that or switch to ours. To switch, replace that step with these steps (keep the commit step that follows; add `pdd` to `git add`):
 
 ```yaml
       - uses: actions/checkout@v4
