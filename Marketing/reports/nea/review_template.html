@@ -1,0 +1,126 @@
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>NEA chart review</title>
+<style>
+:root{--bg:#f6f4ee;--fg:#18181b;--muted:#5f5f66;--card:#ffffff;--rule:#dcd8cc;--accent:#b45309;--bad:#b91c1c;--link:#1d4ed8}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b0b0d;--fg:#f2efe6;--muted:#a3a3ad;--card:#16161a;--rule:#2c2c33;--accent:#ffc904;--bad:#f87171;--link:#8ab4ff;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0b0b0d;--fg:#f2efe6;--muted:#a3a3ad;--card:#16161a;--rule:#2c2c33;--accent:#ffc904;--bad:#f87171;--link:#8ab4ff;color-scheme:dark}
+body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.5 -apple-system,Helvetica,Arial,sans-serif;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px}
+a{color:var(--link)}
+h1{font-size:22px;margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 14px}
+.status{font-size:13px;color:var(--muted);margin:0 0 8px}
+.grid{display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
+@media(min-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+figure{margin:0;background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:12px;min-width:0}
+figure.rej{opacity:.55}
+.pic{position:relative;border-radius:6px;overflow:hidden;cursor:zoom-in;-webkit-user-select:none;user-select:none}
+.pic img{width:100%;display:block;pointer-events:none;-webkit-user-drag:none}
+.pic .shield{position:absolute;inset:0}
+.tr{background:repeating-conic-gradient(#d9d9de 0 25%,#ffffff 0 50%) 0 0/16px 16px}
+.zoomhint{position:absolute;right:8px;bottom:8px;background:rgba(0,0,0,.65);color:#fff;font-size:12px;padding:2px 8px;border-radius:10px}
+figcaption{font-weight:600;margin:10px 0 6px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:6px 0}
+button{font:inherit;padding:7px 12px;border-radius:6px;border:1px solid var(--rule);background:var(--bg);color:var(--fg);cursor:pointer}
+button.ok{background:var(--accent);color:#111;border-color:var(--accent);font-weight:600}
+button.no{color:var(--bad);border-color:var(--bad)}
+button:disabled{opacity:.5;cursor:default}
+textarea{width:100%;min-height:58px;box-sizing:border-box;font:inherit;background:var(--bg);color:var(--fg);border:1px solid var(--rule);border-radius:6px;padding:8px}
+.tag{font-size:12px;color:var(--muted)}
+.desc{color:var(--muted);font-size:13px;margin:0 0 8px}
+.cm{font-size:13px;border-top:1px dashed var(--rule);margin-top:8px;padding-top:6px}
+.err{color:var(--bad);font-size:13px}
+details{margin:8px 0}
+summary{cursor:pointer;font-weight:600;padding:8px 0}
+#lb{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;z-index:50;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top,0px)) 16px}
+#lb.on{display:flex}
+#lbimg{position:relative;width:min(100%,calc((100vh - 32px)*1.3333));aspect-ratio:4/3;background-repeat:no-repeat;background-position:center;background-size:100% 100%;-webkit-user-select:none;user-select:none}
+.hs{position:absolute;transform:translate(-50%,-50%);aspect-ratio:1;border-radius:50%;border:2px solid transparent;background:transparent;padding:0;cursor:pointer}.hs:hover,.hs:focus{border-color:#ffc904}
+.pcard{position:absolute;z-index:60;width:min(360px,72%);box-sizing:border-box;background:rgba(196,167,255,.6);color:#000;border:2px solid #fff;border-radius:14px;padding:14px 18px 12px;font:14px/1.45 -apple-system,Helvetica,Arial,sans-serif;text-shadow:0 0 5px rgba(255,255,255,.55);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);box-shadow:0 8px 28px rgba(0,0,0,.5)}.pcard .ct{display:block;font-size:28px;font-weight:800;line-height:1.1;color:#000;text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:2px}.pcard .nl{text-decoration:none!important}.pcard .cs{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin:4px 0 8px}.pcard table,.pcard tr,.pcard td{border:0!important;background:none!important;font-size:14px;line-height:1.45;color:#000;box-shadow:none}.pcard table{border-collapse:collapse;width:100%}.pcard td{padding:2px 0;vertical-align:top}.pcard td:first-child{font-weight:700;padding-right:12px;white-space:nowrap}.pcard .cl{margin-top:9px;padding-top:7px;border-top:1px solid rgba(0,0,0,.4)}.pcard a{color:#000;font-weight:700}
+#lbx{position:absolute;top:max(12px,env(safe-area-inset-top,0px));right:16px;background:#222;color:#fff;border-color:#555}
+h3{margin:18px 0 6px}.aud .ar{display:grid;grid-template-columns:78px 1fr auto;gap:12px;align-items:center;border-bottom:1px solid #2a3550;padding:9px 0}.pill{font-weight:700;font-size:13px;text-align:center;border-radius:12px;padding:3px 8px;background:#2a3550}.s-done .pill{background:#1f5f3a;color:#d8f5e3}.s-partial .pill{background:#6b5a14;color:#fff3c4}.s-open .pill{background:#7a2a2a;color:#ffd9d9}.an{font-size:13px;opacity:.8;margin-top:2px}.ab{display:flex;gap:8px;align-items:center;flex-wrap:wrap}@media(max-width:760px){.aud .ar{grid-template-columns:1fr}}
+</style>
+<h1>NEA charts: review</h1>
+<p class="sub">For each chart: Approve, Publish or Reject (do not use), or write instructions and press Submit comment. Click a chart to see it larger. Comments and decisions are saved here for the team.</p>
+<p class="status" id="status">Connecting to the review store…</p>
+<div id="app"></div>
+<div id="lb" role="dialog" aria-label="Chart, enlarged"><div id="lbimg"></div><button id="lbx">Close</button></div>
+<script>
+/*ITEMS*/
+/*AUDIT*/
+const GROUPS={now:'New versions (v13)',approved:'Approved earlier'};
+const app=document.getElementById('app'), status=document.getElementById('status');
+let db=null, approvals={}, comments=[];
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function render(){
+  const open=[...document.querySelectorAll('details[open]')].map(d=>d.dataset.g);
+  const drafts={}; document.querySelectorAll('figure').forEach(f=>{const t=f.querySelector('textarea'); if(t&&t.value) drafts[f.dataset.key]=t.value});
+  const byChart={}; comments.forEach(c=>{(byChart[c.chart]=byChart[c.chart]||[]).push(c)});
+  let html='<details data-g="audit" open><summary>Comment audit: what is done and what is still open ('+AUDIT.filter(a=>a.status!=='done').length+' not done of '+AUDIT.length+')</summary><div class="aud">';
+  let lastF='';
+  AUDIT.forEach(a=>{
+    if(a.fam!==lastF){ html+='<h3>'+esc(a.fam)+'</h3>'; lastF=a.fam; }
+    const ap=approvals['audit/'+a.id], mine=ap?(ap.status==='approved'?'Confirmed by you':ap.status==='rejected'?'You say: not done':''):'';
+    html+=`<div class="ar s-${a.status}" data-aid="${esc(a.id)}"><span class="pill">${a.status==='done'?'Done':a.status==='partial'?'Partial':'Open'}</span><div class="at"><b>${esc(a.item)}</b>${a.note?'<div class="an">'+esc(a.note)+'</div>':''}</div><div class="ab"><button class="ok" data-aud="approved">Confirm done</button><button class="no" data-aud="rejected">Not done</button><span class="tag">${mine}</span></div></div>`;
+  });
+  html+='</div></details>';
+  ['now','approved'].forEach((g,gi)=>{
+    const list=ITEMS.filter(i=>i.group===g); if(!list.length) return;
+    const body='<div class="grid">'+list.map(it=>{
+      const ap=approvals[it.key]; const st=ap?ap.status:'';
+      const cls=it.key.includes('transparent')?'tr':'';
+      const cms=(byChart[it.key]||[]).sort((a,b)=>a.at<b.at?-1:1).map(c=>`<div class="cm">${esc(c.text)}<div class="tag">${esc(c.at||'')}</div></div>`).join('');
+      const label=st==='approved'?'Approved':st==='publish'?'Approved for publishing':st==='rejected'?'Rejected: not to be used':'No decision yet';
+      return `<figure data-key="${esc(it.key)}" class="${st==='rejected'?'rej':''}"><div class="pic ${cls}" data-zoom="${esc(it.key)}"><img src="${esc(it.key)}" alt="${esc(it.title)}" loading="lazy" draggable="false"><div class="shield"></div><span class="zoomhint">Click to enlarge</span></div>
+        <figcaption>${esc(it.title)}</figcaption><p class="desc">${it.group==='now'?it.desc:esc(it.desc)}</p>
+        <div class="row"><button class="ok" data-act="approve">Approve</button><button data-act="publish">Publish</button><button class="no" data-act="reject">Reject</button><span class="tag">${label}</span></div>
+        <textarea placeholder="Instructions for Claude: what to change">${esc(drafts[it.key]||'')}</textarea>
+        <div class="row"><button data-act="comment">Submit comment</button><span class="err" data-err></span></div>
+        ${cms}</figure>`;
+    }).join('')+'</div>';
+    html+= gi===0 ? body : `<details data-g="${g}"${open.includes(g)?' open':''}><summary>${esc(GROUPS[g])} (${list.length})</summary>${body}</details>`;
+  });
+  app.innerHTML=html;
+}
+app.addEventListener('contextmenu',e=>{ if(e.target.closest('.pic')) e.preventDefault(); });
+app.addEventListener('dragstart',e=>e.preventDefault());
+const lb=document.getElementById('lb'), lbimg=document.getElementById('lbimg');
+function showCard(box,p){var o=box.querySelector(".pcard");if(o)o.remove();var c=document.createElement("div");c.className="pcard";c.innerHTML=p.h;box.appendChild(c);var w=box.clientWidth,h=box.clientHeight,cw=c.offsetWidth,ch=c.offsetHeight,px=p.x*w,py=p.y*h,g=Math.max(p.r*w,14)+14,l=(px+g+cw<=w-6)?px+g:px-g-cw;if(l<6)l=Math.max(6,Math.min(w-cw-6,px-cw/2));c.style.left=l+"px";c.style.top=Math.min(Math.max(py-ch/2,6),Math.max(6,h-ch-6))+"px"}
+function closeLb(){ lb.classList.remove('on'); lbimg.style.backgroundImage=''; lbimg.innerHTML=''; }
+function openChart(key){
+  lbimg.style.backgroundImage='url("'+key+'")'; lbimg.innerHTML='';
+  const it=ITEMS.find(i=>i.key===key); { const ww=(it&&it.hot&&it.hot.w)||1200, hh=(it&&it.hot&&it.hot.h)||900; lbimg.style.aspectRatio=ww+'/'+hh; lbimg.style.width='min(100%,calc((100vh - 32px)*'+(ww/hh)+'))'; }
+  ((it&&it.hot&&it.hot.pts)||[]).forEach(p=>{
+    const b=document.createElement('button'); b.className='hs'; b.title=p.t; b.setAttribute('aria-label',p.t);
+    b.style.left=(p.x*100)+'%'; b.style.top=(p.y*100)+'%'; b.style.width=(p.r*200)+'%';
+    b.addEventListener('click',ev=>{ ev.stopPropagation(); showCard(lbimg,p); }); lbimg.appendChild(b); });
+  lb.classList.add('on');
+}
+lb.addEventListener('contextmenu',e=>e.preventDefault());
+lb.addEventListener('click',e=>{ if(e.target.closest('.pcard')) return; const c=lbimg.querySelector('.pcard'); if(c&&!e.target.closest('.hs')){ c.remove(); return; } closeLb(); }); document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeLb(); });
+app.addEventListener('click',async e=>{
+  const ab=e.target.closest('button[data-aud]');
+  if(ab){ if(!db) return; const id=ab.closest('.ar').dataset.aid; try{ await db.doc('chart-approvals/'+('audit/'+id).replace(/\//g,'~')).set({chart:'audit/'+id,status:ab.dataset.aud,at:new Date().toISOString()}); }catch(x){ ab.closest('.ab').querySelector('.tag').textContent='Only the owner can decide.'; } return; }
+  const z=e.target.closest('.pic'); if(z){ openChart(z.dataset.zoom); return; }
+  const b=e.target.closest('button[data-act]'); if(!b) return;
+  const fig=b.closest('figure'); const key=fig.dataset.key; const err=fig.querySelector('[data-err]'); err.textContent='';
+  if(!db){ err.textContent='Not connected to the review store.'; return; }
+  try{
+    if(b.dataset.act==='comment'){
+      const text=fig.querySelector('textarea').value.trim(); if(!text){ err.textContent='Write a comment first.'; return; }
+      await db.collection('chart-comments').add({chart:key,text,at:new Date().toISOString()});
+      fig.querySelector('textarea').value='';
+    } else {
+      const status={approve:'approved',publish:'publish',reject:'rejected'}[b.dataset.act];
+      await db.doc('chart-approvals/'+key.replace(/\//g,'~')).set({chart:key,status,at:new Date().toISOString()});
+    }
+  }catch(x){ err.textContent = x && x.code==='invalid_argument' ? 'Only the owner can approve, publish or reject.' : 'Could not save: '+(x&&x.message||'unknown error'); }
+});
+(async()=>{
+  try{ db = window.claude && window.claude.use ? await window.claude.use('db') : null; }catch(e){ db=null; }
+  if(!db){ status.textContent='Read-only: the review store is not available in this view.'; render(); return; }
+  status.textContent='Live: comments and decisions appear for everyone.';
+  db.collection('chart-comments').onSnapshot(s=>{ comments=s.docs.map(d=>({id:d.id,...d.data()})); render(); },e=>{ status.textContent='Store error: '+e.code; });
+  db.collection('chart-approvals').onSnapshot(s=>{ approvals={}; s.docs.forEach(d=>{ approvals[d.data().chart]=d.data(); }); render(); },e=>{});
+  render();
+})();
+</script>

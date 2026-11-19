@@ -1,0 +1,268 @@
+[
+ {
+  "id": "Cumulative NEAs (07, 08)-1",
+  "fam": "Cumulative NEAs (07, 08)",
+  "item": "Line colours: NEAs green, PHAs purple, PDD palette",
+  "status": "done",
+  "note": "Applied in this build."
+ },
+ {
+  "id": "Cumulative NEAs (07, 08)-2",
+  "fam": "Cumulative NEAs (07, 08)",
+  "item": "Emoji markers for each object type",
+  "status": "partial",
+  "note": "One emoji per day and series, not per object: about 110 objects would overlap."
+ },
+ {
+  "id": "Cumulative NEAs (07, 08)-3",
+  "fam": "Cumulative NEAs (07, 08)",
+  "item": "Click opens a card with the data; MPC link",
+  "status": "done",
+  "note": "The card lists the objects of that day."
+ },
+ {
+  "id": "Cumulative NEAs (07, 08)-4",
+  "fam": "Cumulative NEAs (07, 08)",
+  "item": "Caption: MPC link, redrawn every 8 hours, last-updated time, your data line",
+  "status": "done",
+  "note": ""
+ },
+ {
+  "id": "Cumulative NEAs (07, 08)-5",
+  "fam": "Cumulative NEAs (07, 08)",
+  "item": "Axis names and legend spacing; date ticks that thin out as data grows",
+  "status": "done",
+  "note": "Not re-checked after the last data refresh."
+ },
+ {
+  "id": "Distance vs velocity and size (1-3, 1-3c, 1-3d)-6",
+  "fam": "Distance vs velocity and size (1-3, 1-3c, 1-3d)",
+  "item": "1-3c: one more line before the closing row; text \"CLOSEST NEAs  TODAY\"",
+  "status": "done",
+  "note": ""
+ },
+ {
+  "id": "Distance vs velocity and size (1-3, 1-3c, 1-3d)-7",
+  "fam": "Distance vs velocity and size (1-3, 1-3c, 1-3d)",
+  "item": "1-3c/1-3d: horizontal arrow longer so Object type / Size sit on top and under the arrow",
+  "status": "partial",
+  "note": "Longer; the vertical arrow is still longer (no room in the box)."
+ },
+ {
+  "id": "Distance vs velocity and size (1-3, 1-3c, 1-3d)-8",
+  "fam": "Distance vs velocity and size (1-3, 1-3c, 1-3d)",
+  "item": "1-3d: arrows 1 pt thinner, black fill with gold 1 pt border (same for the vertical arrow)",
+  "status": "done",
+  "note": "1 px gold border, black fill (no fill and a darker gold border on the transparent version)."
+ },
+ {
+  "id": "Distance vs velocity and size (1-3, 1-3c, 1-3d)-9",
+  "fam": "Distance vs velocity and size (1-3, 1-3c, 1-3d)",
+  "item": "1-3d: list title becomes the last row (white, all caps) and \"15 CLOSEST NEAs\" moves to the top as the list title",
+  "status": "done",
+  "note": "\"CLOSEST NEAs  TODAY\" is the title; \"SORTED BY VELOCITY (KM/S)\" is the last row."
+ },
+ {
+  "id": "Distance vs velocity and size (1-3, 1-3c, 1-3d)-10",
+  "fam": "Distance vs velocity and size (1-3, 1-3c, 1-3d)",
+  "item": "1-3d: LEGENDS bigger, in the newspaper header font",
+  "status": "done",
+  "note": "Didot, the closest installed face to the header font (Playfair is not installed)."
+ },
+ {
+  "id": "Distance vs velocity and size (1-3, 1-3c, 1-3d)-11",
+  "fam": "Distance vs velocity and size (1-3, 1-3c, 1-3d)",
+  "item": "1-3d: 1.5 line spacing between the two legend lines; size values bottom-aligned with the circles",
+  "status": "done",
+  "note": ""
+ },
+ {
+  "id": "Distance vs velocity and size (1-3, 1-3c, 1-3d)-12",
+  "fam": "Distance vs velocity and size (1-3, 1-3c, 1-3d)",
+  "item": "1-3d: date range in the title (changes daily); subtitle in gold",
+  "status": "done",
+  "note": "Title now carries the 7-day date range; the subtitle is gold."
+ },
+ {
+  "id": "Size, distance and velocity (3D)-13",
+  "fam": "Size, distance and velocity (3D)",
+  "item": "Velocity axis values (0-25) and title aligned with the first letter of the chart title",
+  "status": "done",
+  "note": ""
+ },
+ {
+  "id": "Size, distance and velocity (3D)-14",
+  "fam": "Size, distance and velocity (3D)",
+  "item": "LD axis split: LD on the bottom edge, km on the top edge; values read bottom-up; ticks twice as long, inside the cube plane; titles parallel and centred",
+  "status": "done",
+  "note": ""
+ },
+ {
+  "id": "Size, distance and velocity (3D)-15",
+  "fam": "Size, distance and velocity (3D)",
+  "item": "No grid on the LD face; size axis ends with a free step above the largest object",
+  "status": "done",
+  "note": "Today it ends at 0.3, from the data."
+ },
+ {
+  "id": "Size, distance and velocity (3D)-16",
+  "fam": "Size, distance and velocity (3D)",
+  "item": "One-line legend; BFC box bottom-left (\"TODAY'S BFC\")",
+  "status": "done",
+  "note": ""
+ },
+ {
+  "id": "Size, distance and velocity (3D)-17",
+  "fam": "Size, distance and velocity (3D)",
+  "item": "List: dotted box, title on the subtitle line, emoji / number / name / velocity, bigger numbers, clickable rows",
+  "status": "done",
+  "note": ""
+ },
+ {
+  "id": "Size, distance and velocity (3D)-18",
+  "fam": "Size, distance and velocity (3D)",
+  "item": "New plot with lunar distance and velocity axes swapped",
+  "status": "done",
+  "note": "2-3d, dark and transparent."
+ },
+ {
+  "id": "Size, distance and velocity (3D)-19",
+  "fam": "Size, distance and velocity (3D)",
+  "item": "Caption: LD never negative; maths relating size, distance and velocity",
+  "status": "done",
+  "note": "Restored in this build."
+ },
+ {
+  "id": "Size, distance and velocity (3D)-20",
+  "fam": "Size, distance and velocity (3D)",
+  "item": "Colours and fonts of the PDD newspaper",
+  "status": "partial",
+  "note": "Dark versions use the PDD navy/rose palette; transparent versions and the Playfair font are not done."
+ },
+ {
+  "id": "Diameter vs distance (3, 3b)-21",
+  "fam": "Diameter vs distance (3, 3b)",
+  "item": "Emoji per type, [ | ] end bars, scientific-notation size axis, Error margin legend, dotted light grid",
+  "status": "done",
+  "note": ""
+ },
+ {
+  "id": "Diameter vs distance (3, 3b)-22",
+  "fam": "Diameter vs distance (3, 3b)",
+  "item": "Caption with flow and references (v14 comment)",
+  "status": "partial",
+  "note": "Rewritten; please re-read it."
+ },
+ {
+  "id": "Diameter vs distance (3, 3b)-23",
+  "fam": "Diameter vs distance (3, 3b)",
+  "item": "Legend aligned with the plot subtitle",
+  "status": "open",
+  "note": ""
+ },
+ {
+  "id": "Impact risk: distance vs Torino and Palermo (imp1)-24",
+  "fam": "Impact risk: distance vs Torino and Palermo (imp1)",
+  "item": "Title with the same alert schema as the timeline plot; flash the objects behind the alert",
+  "status": "done",
+  "note": "The alert text and the object behind it (101955) flash together."
+ },
+ {
+  "id": "Impact risk: distance vs Torino and Palermo (imp1)-25",
+  "fam": "Impact risk: distance vs Torino and Palermo (imp1)",
+  "item": "Check the Torino and Palermo data (\"not possible what you show\")",
+  "status": "done",
+  "note": "Found stale data: the table used per-virtual-impactor values. Now cumulative Palermo, cumulative probability and the range of impact years from the Sentry summary."
+ },
+ {
+  "id": "Impact risk: distance vs Torino and Palermo (imp1)-26",
+  "fam": "Impact risk: distance vs Torino and Palermo (imp1)",
+  "item": "Side list of objects (emoji, number, designation, year or range) and a table version with its own caption",
+  "status": "done",
+  "note": "Side list in the chart and a table version with caption (imp1b)."
+ },
+ {
+  "id": "Impact risk: distance vs Torino and Palermo (imp1)-27",
+  "fam": "Impact risk: distance vs Torino and Palermo (imp1)",
+  "item": "Numbers 3 pt bigger, axis values 2 pt bigger, extra space before the legend, size legend values (1-10 m ... over 1 km)",
+  "status": "done",
+  "note": ""
+ },
+ {
+  "id": "Impact risk: distance vs Torino and Palermo (imp1)-28",
+  "fam": "Impact risk: distance vs Torino and Palermo (imp1)",
+  "item": "Object cards in light purple at 60% opacity (all plots)",
+  "status": "done",
+  "note": "Light purple, 60% opacity, on every chart."
+ },
+ {
+  "id": "Impact risk: distance vs Torino and Palermo (imp1)-29",
+  "fam": "Impact risk: distance vs Torino and Palermo (imp1)",
+  "item": "Caption with Sentry, Palermo and Torino links and definitions",
+  "status": "done",
+  "note": ""
+ },
+ {
+  "id": "Impact risk: alert timeline (imp3b)-30",
+  "fam": "Impact risk: alert timeline (imp3b)",
+  "item": "Flash cadence +1 s per tier (1.2, 1.3, 1.5, 1.7 s); alert counts only objects within 200 years",
+  "status": "done",
+  "note": ""
+ },
+ {
+  "id": "Impact risk: alert timeline (imp3b)-31",
+  "fam": "Impact risk: alert timeline (imp3b)",
+  "item": "Caption in your order (data, scales, symbols, references), tiers with triangles, maths explained step by step with an example",
+  "status": "done",
+  "note": "Please read it on the PDD mock-up."
+ },
+ {
+  "id": "Impact risk: alert timeline (imp3b)-32",
+  "fam": "Impact risk: alert timeline (imp3b)",
+  "item": "The object or objects behind the alert flash at the same rate",
+  "status": "done",
+  "note": "101955 flashes with the alert on both impact plots."
+ },
+ {
+  "id": "Impact risk: alert timeline (imp3b)-33",
+  "fam": "Impact risk: alert timeline (imp3b)",
+  "item": "Size text on the same line as its circle icon; errors of the data",
+  "status": "partial",
+  "note": "Sentry gives no error bars; the caption says so."
+ },
+ {
+  "id": "Impact risk: alert timeline (imp3b)-34",
+  "fam": "Impact risk: alert timeline (imp3b)",
+  "item": "New plot with the Torino and Palermo axes visible",
+  "status": "open",
+  "note": ""
+ },
+ {
+  "id": "Impact risk: alert timeline (imp3b)-35",
+  "fam": "Impact risk: alert timeline (imp3b)",
+  "item": "Megaton definition pop-out box in the caption",
+  "status": "open",
+  "note": ""
+ },
+ {
+  "id": "Impact risk: timeline (imp3)-36",
+  "fam": "Impact risk: timeline (imp3)",
+  "item": "Axis without decimals, bigger superscripts, km colour legend",
+  "status": "done",
+  "note": ""
+ },
+ {
+  "id": "All captions-37",
+  "fam": "All captions",
+  "item": "Collapsible captions, collapsed by default, first line plus an arrow",
+  "status": "done",
+  "note": "On the PDD mock-up."
+ },
+ {
+  "id": "All captions-38",
+  "fam": "All captions",
+  "item": "Captions free of instructions to the reader; flow, definitions and references",
+  "status": "partial",
+  "note": "Rewritten for all plots; read each one and tell me what still does not flow."
+ }
+]

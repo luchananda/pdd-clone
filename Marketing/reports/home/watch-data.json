@@ -1,0 +1,69 @@
+{
+ "time": "2026-11-19 07:28 UTC",
+ "sun": {
+  "lat": -19.480622761044078,
+  "lon": 64.33211781097614
+ },
+ "pts": [
+  {
+   "des": "2024 YV5",
+   "mpec": "2026-W38",
+   "date": "2026-11-18",
+   "pha": false,
+   "neo": true,
+   "impact": false,
+   "lat": 29.86038,
+   "lon": -75.2492101656112
+  },
+  {
+   "des": "2016 BK1",
+   "mpec": "2026-W37",
+   "date": "2026-11-18",
+   "pha": false,
+   "neo": true,
+   "impact": false,
+   "lat": 28.38401,
+   "lon": -56.8101901656112
+  },
+  {
+   "des": "2026 WN",
+   "mpec": "2026-W34",
+   "date": "2026-11-18",
+   "pha": false,
+   "neo": true,
+   "impact": false,
+   "lat": 29.73755,
+   "lon": -53.154620165611206
+  },
+  {
+   "des": "2026 WL",
+   "mpec": "2026-W33",
+   "date": "2026-11-18",
+   "pha": false,
+   "neo": true,
+   "impact": false,
+   "lat": 0.49911,
+   "lon": -124.58878016561121
+  },
+  {
+   "des": "2026 WK",
+   "mpec": "2026-W32",
+   "date": "2026-11-18",
+   "pha": false,
+   "neo": true,
+   "impact": false,
+   "lat": -3.43876,
+   "lon": -126.27412016561121
+  },
+  {
+   "des": "2026 WJ",
+   "mpec": "2026-W31",
+   "date": "2026-11-18",
+   "pha": false,
+   "neo": true,
+   "impact": false,
+   "lat": -10.21252,
+   "lon": -144.3932801656112
+  }
+ ]
+}
