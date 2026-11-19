@@ -1,6 +1,7 @@
 name: Build and deploy the PDD clone
 on:
-  # the hourly schedule is off: pdd.luisafernanda.space is built from the luisafernanda-space repo (see INTEGRATION.md)
+  schedule:
+    - cron: "7 */3 * * *"      # every 3 hours (demo on GitHub Pages; pdd.luisafernanda.space is built from luisafernanda-space, see INTEGRATION.md)
   workflow_dispatch: {}
   push:
     branches: [main]
@@ -29,6 +30,12 @@ jobs:
           NASA_API_KEY: ${{ secrets.NASA_API_KEY }}
           SKIP_CHARTS: "1"
         run: python3 Marketing/reports/nea/refresh_data.py
+      - name: Draw the charts (bundled fonts and emoji in Marketing/reports/nea/fonts)
+        env:
+          CHART_FONTS: bundled
+        run: |
+          python3 Marketing/reports/nea/nea_charts_v11.py /tmp/charts
+          python3 Marketing/reports/nea/pdd_carousels.py /tmp/charts
       - name: Build the page from the live paper
         run: |
           python3 Marketing/reports/nea/build_clone.py site

@@ -272,7 +272,10 @@ def fig_cum(logd, style, out, log=True, start='2026-11-01'):
 LIGHT_GOLD = (255, 228, 140, 255)
 
 def serif_text(img, xy, s_, sz, color, anchor='mm'):
-    f = ImageFont.truetype('/System/Library/Fonts/Supplemental/Didot.ttc', sz, index=2); ImageDraw.Draw(img).text(xy, s_, font=f, fill=color, anchor=anchor)
+    f = ImageFont.truetype(N.PLAYFAIR, sz)
+    try: f.set_variation_by_name('Black')
+    except Exception: pass
+    ImageDraw.Draw(img).text(xy, s_, font=f, fill=color, anchor=anchor)
 
 def arrow(img, d, th, tip, direction, length=112, shaft=9, head=21, headlen=32, thin=False):
     """block arrow with white fill (clear on the transparent theme) and a 2 px black border; direction 'left' or 'up'."""

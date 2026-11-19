@@ -145,9 +145,15 @@ def write_xlsx(rows, path):
 # ---------- charts (PIL) ----------
 from PIL import Image, ImageDraw, ImageFont
 
-FR = '/System/Library/Fonts/Supplemental/Arial.ttf'
-FB = '/System/Library/Fonts/Supplemental/Arial Bold.ttf'
-EMOJI_FONT = '/System/Library/Fonts/Apple Color Emoji.ttc'
+import os as _os
+_FD = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), 'fonts')
+# macOS fonts when present; otherwise (GitHub Actions, Linux) the fonts bundled in ./fonts. CHART_FONTS=bundled forces the bundled ones.
+BUNDLED = _os.environ.get('CHART_FONTS') == 'bundled' or not _os.path.exists('/System/Library/Fonts/Supplemental/Arial.ttf')
+FR = _os.path.join(_FD, 'LiberationSans-Regular.ttf') if BUNDLED else '/System/Library/Fonts/Supplemental/Arial.ttf'            # Liberation Sans is metric-compatible with Arial
+FB = _os.path.join(_FD, 'LiberationSans-Bold.ttf') if BUNDLED else '/System/Library/Fonts/Supplemental/Arial Bold.ttf'
+EMOJI_FONT = _os.path.join(_FD, 'NotoColorEmoji.ttf') if BUNDLED else '/System/Library/Fonts/Apple Color Emoji.ttc'
+EMOJI_SIZE = 109 if BUNDLED else 160                                                                                              # Noto Color Emoji has a single 109 px bitmap size
+PLAYFAIR = _os.path.join(_FD, 'PlayfairDisplay.ttf')                                                                              # the newspaper's header font
 W, H = 1200, 900
 SUP = {'0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹', '-': '⁻'}
 MES_ES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic']
@@ -244,7 +250,7 @@ _EMO = None
 def emoji(img, ch, cx, cy, px=30):
     global _EMO
     if _EMO is None:
-        _EMO = ImageFont.truetype(EMOJI_FONT, 160)
+        _EMO = ImageFont.truetype(EMOJI_FONT, EMOJI_SIZE)
     layer = Image.new('RGBA', (220, 220), (0, 0, 0, 0))
     ImageDraw.Draw(layer).text((20, 10), ch, font=_EMO, embedded_color=True)
     bb = layer.getbbox()
