@@ -1,7 +1,6 @@
 name: Build and deploy the PDD clone
 on:
-  schedule:
-    - cron: "7 * * * *"      # every hour
+  # the hourly schedule is off: pdd.luisafernanda.space is built from the luisafernanda-space repo (see INTEGRATION.md)
   workflow_dispatch: {}
   push:
     branches: [main]
