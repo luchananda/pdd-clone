@@ -152,6 +152,12 @@ css += ('@media(max-width:760px){'
   '#swx .ad4 .ti{height:64px;flex:0 0 64px}#swx .ad4 .ti img,#swx .ad4 .xl{max-height:64px;width:64px;height:64px}'
   '#swx .ad4 b{flex:1 1 calc(100% - 80px)}#swx .ad4 .tt{flex:1 1 100%}'
   '}')
+# --- sizes: every font 2 pt (2.67 px) smaller, and the band wider (almost edge to edge)
+def _px(m): return m.group(1) + '%.1fpx' % max(9.0, float(m.group(2)) - 2.67)
+css = re.sub(r'(font-size:)(\d+(?:\.\d+)?)px', _px, css)
+css = re.sub(r'(font:(?:\s*(?:italic|normal|bold|\d{3}))*\s*)(\d+(?:\.\d+)?)px', _px, css)
+css += '#swx{box-sizing:border-box;width:min(1560px,97vw)!important;max-width:none!important;position:relative;left:50%;transform:translateX(-50%);font-size:18.3px!important}'
+if os.environ.get('PREVIEW_OPEN'): band = band.replace('<details', '<details open')
 inject_head = '<style id="swx-css">' + css + '</style>'
 inject_body = lb + lb2 + inject_libs + '<script id="swx-js">' + js + '</script>' + mapblock
 # --- the live page with absolute links

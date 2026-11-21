@@ -38,7 +38,7 @@ jobs:
           python3 Marketing/reports/nea/pdd_carousels.py /tmp/charts
       - name: Build the page from the live paper
         run: |
-          python3 Marketing/reports/nea/build_clone.py site
+          MOCKDIR=/tmp/mockups SITE_OUT=site python3 Marketing/reports/nea/build_mocks.py
           echo "pdd.luisafernanda.space" > site/CNAME
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
